@@ -1,22 +1,26 @@
+import { useCart } from "../context/cartcontext"; // ✅ Import the cart context
+
 export default function Home() {
+  const { addToCart } = useCart(); // ✅ Use the addToCart function
+
   const featuredCars = [
     {
       id: 1,
       name: "Hot Wheels Turbo Racer",
       price: "$9.99",
-      image: "https://via.placeholder.com/400x200?text=Turbo+Racer",
+      image: "https://media.wired.com/photos/5926c2fa7034dc5f91bec862/16:9/w_929,h_523,c_limit/HotwheelsHP.jpg",
     },
     {
       id: 2,
       name: "Street Beast X",
       price: "$8.49",
-      image: "https://via.placeholder.com/400x200?text=Street+Beast+X",
+      image: "https://media.istockphoto.com/id/545788626/photo/67-pontiac-gto-hot-wheels-diecast-toy-car.jpg?s=612x612&w=0&k=20&c=1g4FFYwq9JueUjmvFVovsv9dIiLbfu-F3dAR33HDcq4=",
     },
     {
       id: 3,
       name: "Monster Jam Max-D",
       price: "$12.99",
-      image: "https://via.placeholder.com/400x200?text=Monster+Truck",
+      image: "https://i.pinimg.com/736x/f2/db/8a/f2db8a2f65de932b935f1d5c127ebd1c.jpg",
     },
   ];
 
@@ -49,8 +53,11 @@ export default function Home() {
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-gray-800">{car.name}</h3>
                   <p className="text-gray-600 mb-2">{car.price}</p>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                    Buy Now
+                  <button
+                    onClick={() => addToCart(car)} // ✅ Add to cart functionality
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+                  >
+                    ➕ Add to Cart
                   </button>
                 </div>
               </div>

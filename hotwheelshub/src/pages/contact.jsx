@@ -18,34 +18,30 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+    console.log("Form Submitted:", formData);
     setSubmitted(true);
-
-    // Reset form (optional)
     setFormData({ name: "", email: "", message: "" });
-
-    // Later: Send to EmailJS or backend server here
   };
 
   return (
-    <div className="min-h-screen bg-white py-16 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-red-500 to-blue-600 py-16 px-4 text-white">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
-          Contact Us
+        <h1 className="text-5xl font-extrabold text-center mb-10 drop-shadow-lg">
+          🚗 Contact HotWheelsHub
         </h1>
 
         {submitted && (
-          <div className="mb-6 text-green-600 text-center font-medium">
-            ✅ Your message has been sent!
+          <div className="mb-6 text-center bg-green-200 text-green-800 font-bold py-3 px-5 rounded-lg shadow-lg">
+            ✅ Your message has been sent successfully!
           </div>
         )}
 
         <form
           onSubmit={handleSubmit}
-          className="bg-gray-100 p-6 rounded-lg shadow-md space-y-4"
+          className="bg-black bg-opacity-80 backdrop-blur-md p-8 rounded-2xl shadow-2xl space-y-6"
         >
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-2 text-yellow-300 font-semibold">
               Name
             </label>
             <input
@@ -54,13 +50,13 @@ export default function Contact() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black"
               placeholder="Your name"
             />
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-2 text-yellow-300 font-semibold">
               Email
             </label>
             <input
@@ -69,13 +65,13 @@ export default function Contact() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-2 text-yellow-300 font-semibold">
               Message
             </label>
             <textarea
@@ -84,17 +80,19 @@ export default function Contact() {
               required
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Write your message here..."
+              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black"
+              placeholder="Write your message..."
             ></textarea>
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
-          >
-            Send Message
-          </button>
+          <div className="text-center">
+            <button
+              type="submit"
+              className="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-8 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              ✉️ Send Message
+            </button>
+          </div>
         </form>
       </div>
     </div>
