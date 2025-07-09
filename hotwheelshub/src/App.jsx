@@ -11,7 +11,6 @@ import Admin from './pages/admin';
 import Checkout from './pages/Checkout'; // ✅ Import the page
 
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
@@ -26,15 +25,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/Checkout" element={<Checkout />} />
-        {/* Admin Page (Protected) */}
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <Admin />
-            </AdminRoute>
-          }
-        />
+        {/* Admin Page (No longer protected) */}
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </>
   );

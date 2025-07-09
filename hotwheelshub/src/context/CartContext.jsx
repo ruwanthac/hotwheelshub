@@ -26,6 +26,20 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // ✅ Update item quantity in cart
+  const updateQuantity = (id, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeFromCart(id);
+      return;
+    }
+    
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
   // Remove item from cart
   const removeFromCart = (id) => {
     setCartItems((prevItems) =>
@@ -38,9 +52,30 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
   };
 
+  // ✅ Get cart total count (items)
+  const getCartCount = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // ✅ Get cart total in USD (base currency)
+  const getCartTotalUSD = () => {
+    return cartItems.reduce((total, item) => {
+      const price = parseFloat(item.price.replace('$', ''));
+      return total + (price * item.quantity);
+    }, 0);
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+      value={{ 
+        cartItems, 
+        addToCart, 
+        updateQuantity,
+        removeFromCart, 
+        clearCart,
+        getCartCount,
+        getCartTotalUSD
+      }}
     >
       {children}
     </CartContext.Provider>

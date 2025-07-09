@@ -1,28 +1,33 @@
-import { useCart } from "../context/cartcontext"; // ✅ Import the cart context
+import { useCart } from "../context/CartContext"; // ✅ Import the cart context
+import { useCurrency } from "../context/CurrencyContext"; // ✅ Import currency context
+import { useState, useEffect } from "react";
+import { productsService } from "../firebase";
 
 export default function Home() {
   const { addToCart } = useCart(); // ✅ Use the addToCart function
+  const { formatPrice } = useCurrency(); // ✅ Use currency formatting
+  const [featuredCars, setFeaturedCars] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const featuredCars = [
-    {
-      id: 1,
-      name: "Hot Wheels Turbo Racer",
-      price: "$9.99",
-      image: "https://media.wired.com/photos/5926c2fa7034dc5f91bec862/16:9/w_929,h_523,c_limit/HotwheelsHP.jpg",
-    },
-    {
-      id: 2,
-      name: "Street Beast X",
-      price: "$8.49",
-      image: "https://media.istockphoto.com/id/545788626/photo/67-pontiac-gto-hot-wheels-diecast-toy-car.jpg?s=612x612&w=0&k=20&c=1g4FFYwq9JueUjmvFVovsv9dIiLbfu-F3dAR33HDcq4=",
-    },
-    {
-      id: 3,
-      name: "Monster Jam Max-D",
-      price: "$12.99",
-      image: "https://i.pinimg.com/736x/f2/db/8a/f2db8a2f65de932b935f1d5c127ebd1c.jpg",
-    },
-  ];
+  // ✅ Load featured products from Firebase on component mount
+  useEffect(() => {
+    loadFeaturedProducts();
+  }, []);
+
+  const loadFeaturedProducts = async () => {
+    try {
+      setLoading(true);
+      const products = await productsService.getProducts();
+      // Show first 3 products as featured
+      setFeaturedCars(products.slice(0, 3));
+    } catch (error) {
+      console.error('Error loading featured products:', error);
+      // Fallback to empty array on error
+      setFeaturedCars([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="font-sans">
@@ -42,27 +47,41 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-10 text-center text-gray-800">Featured Hot Wheels</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {featuredCars.map((car) => (
-              <div key={car.id} className="bg-gray-100 rounded-xl shadow hover:shadow-lg overflow-hidden transition">
-                <img
-                  src={car.image}
-                  alt={car.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800">{car.name}</h3>
-                  <p className="text-gray-600 mb-2">{car.price}</p>
-                  <button
-                    onClick={() => addToCart(car)} // ✅ Add to cart functionality
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-                  >
-                    ➕ Add to Cart
-                  </button>
+          {loading ? (
+            <div className="text-center text-gray-600">
+              <p className="text-lg">Loading featured products...</p>
+            </div>
+          ) : featuredCars.length === 0 ? (
+            <div className="text-center text-gray-600">
+              <p className="text-lg">No featured products available yet.</p>
+              <p className="text-sm mt-2">Visit our admin panel to add some awesome Hot Wheels!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {featuredCars.map((car) => (
+                <div key={car.id} className="bg-gray-100 rounded-xl shadow hover:shadow-lg overflow-hidden transition">
+                  <img
+                    src={car.image}
+                    alt={car.name}
+                    className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';
+                    }}
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-800">{car.name}</h3>
+                    <p className="text-gray-600 mb-2">{formatPrice(car.price)}</p>
+                    <button
+                      onClick={() => addToCart(car)} // ✅ Add to cart functionality
+                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+                    >
+                      ➕ Add to Cart
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
