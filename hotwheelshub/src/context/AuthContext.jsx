@@ -1,70 +1,45 @@
+// src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
-import { 
-  onAuthStateChanged, 
-  signOut as firebaseSignOut,
+import {
+  onAuthStateChanged,
+  signOut,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../firebase"; // ✅ update if path is different
+import { auth } from "../firebase";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setLoading(false);
-    });
+    const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
 
-  // ✅ Login function
-  const login = async (email, password) => {
-    setLoading(true);
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    setLoading(false);
-    return result;
-  };
+  // ✅ Authentication functions
+  const signup = (email, password) =>
+    createUserWithEmailAndPassword(auth, email, password);
 
-  // ✅ Signup function
-  const signup = async (email, password) => {
-    setLoading(true);
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-    setLoading(false);
-    return result;
-  };
+  const login = (email, password) =>
+    signInWithEmailAndPassword(auth, email, password);
 
-  // ✅ Logout function
-  const logout = () => firebaseSignOut(auth);
+  const logout = () => signOut(auth);
 
-  // ✅ Check if user is admin
   const isAdmin = user?.email === "admin@example.com";
 
-  const value = {
-    user,
-    login,
-    signup,
-    logout,
-    isAdmin,
-    loading
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, signup, login, logout, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-// ✅ Custom hook to use auth context
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
-
+};
