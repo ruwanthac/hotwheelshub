@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCart } from '../context/cartcontext';
 import { useAuth } from "../context/AuthContext";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useCart } from "../context/cartcontext";
 
 export default function Navbar() {
   const { cartItems, removeFromCart } = useCart();
@@ -14,17 +14,28 @@ export default function Navbar() {
     <>
       {/* NAVBAR */}
       <nav className="bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 shadow-lg text-white px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold tracking-wide hover:scale-105 transition">
+        <Link
+          to="/"
+          className="text-2xl font-bold tracking-wide hover:scale-105 transition"
+        >
           🏁 HotWheelsHub
         </Link>
 
         <div className="flex gap-6 items-center text-lg">
-          <Link to="/" className="hover:underline hover:text-yellow-100">Home</Link>
-          <Link to="/shop" className="hover:underline hover:text-yellow-100">Shop</Link>
-          <Link to="/contact" className="hover:underline hover:text-yellow-100">Contact</Link>
+          <Link to="/" className="hover:underline hover:text-yellow-100">
+            Home
+          </Link>
+          <Link to="/shop" className="hover:underline hover:text-yellow-100">
+            Shop
+          </Link>
+          <Link to="/contact" className="hover:underline hover:text-yellow-100">
+            Contact
+          </Link>
 
           {isAdmin && (
-            <Link to="/admin" className="hover:underline hover:text-yellow-100">Admin</Link>
+            <Link to="/admin" className="hover:underline hover:text-yellow-100">
+              Admin
+            </Link>
           )}
 
           {user ? (
@@ -39,8 +50,18 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="hover:underline hover:text-yellow-100">Login</Link>
-              <Link to="/register" className="hover:underline hover:text-yellow-100">Register</Link>
+              <Link
+                to="/login"
+                className="hover:underline hover:text-yellow-100"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="hover:underline hover:text-yellow-100"
+              >
+                Register
+              </Link>
             </>
           )}
 
@@ -62,12 +83,17 @@ export default function Navbar() {
       {/* CART DRAWER */}
       <div
         className={`fixed top-0 right-0 w-80 h-full bg-white shadow-lg border-l border-gray-300 transform transition-transform duration-300 z-50 ${
-          isCartOpen ? 'translate-x-0' : 'translate-x-full'
+          isCartOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="p-4 flex justify-between items-center border-b">
           <h2 className="text-xl font-bold text-orange-600">Your Cart</h2>
-          <button onClick={() => setIsCartOpen(false)} className="text-red-500 text-2xl">&times;</button>
+          <button
+            onClick={() => setIsCartOpen(false)}
+            className="text-red-500 text-2xl"
+          >
+            &times;
+          </button>
         </div>
 
         {cartItems.length === 0 ? (
@@ -76,7 +102,10 @@ export default function Navbar() {
           <>
             <ul className="p-4 space-y-4">
               {cartItems.map((item) => (
-                <li key={item.id} className="flex justify-between items-center bg-gray-50 p-2 rounded shadow">
+                <li
+                  key={item.id}
+                  className="flex justify-between items-center bg-gray-50 p-2 rounded shadow"
+                >
                   <div>
                     <p className="font-medium">{item.name}</p>
                     <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
@@ -91,7 +120,6 @@ export default function Navbar() {
               ))}
             </ul>
 
-            {/* ✅ Checkout Button */}
             <div className="p-4 border-t">
               <Link
                 to="/checkout"

@@ -18,8 +18,13 @@ export default function Checkout() {
     setShipping({ ...shipping, [e.target.name]: e.target.value });
   };
 
-  // Calculate total price
-  const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
+  // ✅ Fixed total price calculation
+  const total = cartItems.reduce((sum, item) => {
+    const price = parseFloat(item.price);
+    const quantity = parseInt(item.quantity);
+    if (isNaN(price) || isNaN(quantity)) return sum;
+    return sum + price * quantity;
+  }, 0);
 
   // Handle form submission
   const handleCheckout = (e) => {
@@ -46,17 +51,22 @@ export default function Checkout() {
       ) : (
         <>
           <ul className="space-y-4 mb-6">
-            {cartItems.map(item => (
-              <li key={item.id} className="flex justify-between items-center border-b pb-2">
-                <span>{item.name} x {item.quantity}</span>
-                <span>Rs. {(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
-              </li>
-            ))}
+            {cartItems.map(item => {
+              const price = parseFloat(item.price);
+              const quantity = parseInt(item.quantity);
+              const itemTotal = !isNaN(price) && !isNaN(quantity) ? (price * quantity).toFixed(2) : "0.00";
+              return (
+                <li key={item.id} className="flex justify-between items-center border-b pb-2">
+                  <span>{item.name} x {item.quantity}</span>
+                  <span>Rs. {itemTotal}</span>
+                </li>
+              );
+            })}
           </ul>
 
           {/* 💰 Show Total Price */}
           <div className="text-xl font-semibold mb-6">
-            Total: Rs. {total.toFixed(2)}
+            Total: Rs. {isNaN(total) ? "0.00" : total.toFixed(2)}
           </div>
 
           {/* 📦 Shipping Form */}
