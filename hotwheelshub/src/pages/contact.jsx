@@ -69,7 +69,7 @@ export default function Contact() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black"
+              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-white placeholder-gray-300"
               placeholder="Your name"
             />
           </div>
@@ -84,7 +84,7 @@ export default function Contact() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black"
+              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-white placeholder-gray-300"
               placeholder="you@example.com"
             />
           </div>
@@ -99,7 +99,7 @@ export default function Contact() {
               required
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black"
+              className="w-full px-4 py-3 rounded-lg border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-white placeholder-gray-300"
               placeholder="Write your message..."
             ></textarea>
           </div>
