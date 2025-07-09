@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { db } from "../firebase"; // ✅ Import Firestore
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -8,6 +10,7 @@ export default function Contact() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -16,11 +19,27 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    setSubmitted(true);
-    setFormData({ name: "", email: "", message: "" });
+    setSending(true);
+
+    try {
+      // ✅ Save contact to Firestore
+      await addDoc(collection(db, "contacts"), {
+        ...formData,
+        createdAt: serverTimestamp(),
+      });
+
+      setSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
+
+      // Optional: Auto-hide message after a few seconds
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      alert("❌ Failed to send message: " + err.message);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -88,9 +107,10 @@ export default function Contact() {
           <div className="text-center">
             <button
               type="submit"
+              disabled={sending}
               className="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-8 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
             >
-              ✉️ Send Message
+              {sending ? "Sending..." : "✉️ Send Message"}
             </button>
           </div>
         </form>
