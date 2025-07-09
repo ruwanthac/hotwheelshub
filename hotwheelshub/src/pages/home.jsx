@@ -1,11 +1,13 @@
 import { useCart } from "../context/CartContext"; // ✅ Import the cart context
 import { useCurrency } from "../context/CurrencyContext"; // ✅ Import currency context
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import navigation
 import { productsService } from "../firebase";
 
 export default function Home() {
   const { addToCart } = useCart(); // ✅ Use the addToCart function
   const { formatPrice } = useCurrency(); // ✅ Use currency formatting
+  const navigate = useNavigate(); // ✅ Use navigation hook
   const [featuredCars, setFeaturedCars] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +38,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-5xl font-bold mb-4">Tiny Cars. Big Dreams.</h1>
           <p className="text-xl mb-6">Fuel your passion for collecting with our top Hot Wheels!</p>
-          <button className="bg-white text-orange-600 font-semibold px-6 py-2 rounded-full hover:bg-gray-100 transition">
+          <button 
+            onClick={() => navigate('/shop')}
+            className="bg-white text-orange-600 font-semibold px-6 py-2 rounded-full hover:bg-gray-100 transition"
+          >
             Shop Now
           </button>
         </div>
@@ -89,7 +94,10 @@ export default function Home() {
       <section className="bg-blue-600 text-white py-12 px-6 text-center">
         <h3 className="text-2xl font-semibold mb-3">Ready to race?</h3>
         <p className="mb-4">Join the Hot Wheels community and find your dream toy car today!</p>
-        <button className="bg-white text-blue-600 font-semibold px-6 py-2 rounded-full hover:bg-gray-100 transition">
+        <button 
+          onClick={() => navigate('/shop')}
+          className="bg-white text-blue-600 font-semibold px-6 py-2 rounded-full hover:bg-gray-100 transition"
+        >
           View All Products
         </button>
       </section>
